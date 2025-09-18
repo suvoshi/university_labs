@@ -34,6 +34,11 @@ public class InternetOperator
             throw new ArgumentException("Не может быть отрицательным или равным 0");
         }
         Cost = cost;
+
+        if (users < 0)
+        {
+            throw new ArgumentException("Не может быть отрицательным");
+        }
         Users = users;
     }
 
