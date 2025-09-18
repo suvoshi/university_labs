@@ -22,8 +22,17 @@ public class InternetOperator
     private string _password;
 
     public InternetOperator(string name, float cost, int users)
-    {
+    {   
+        if (name.Length == 0)
+        {
+            throw new ArgumentException("Не может быть пустым");
+        }
         Name = name;
+
+        if (cost <= 0)
+        {
+            throw new ArgumentException("Не может быть отрицательным или равным 0");
+        }
         Cost = cost;
         Users = users;
     }
