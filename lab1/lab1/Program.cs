@@ -3,12 +3,12 @@
 InternetOperator op1 = new("op1", 500, 20000);
 op1.Password = "123qwerty";
 
-InternetOperator op2 = new("op2", 654, 34567);
+InternetOperator op2 = new("op2", 0, 34567);
 op2.Password = "secretpassword";
 
 
 op1.DisplayInfo();
-op1.DisplayProfit();
+op1.DisplayProfit();    
 
 op2.DisplayInfo();
 op2.DisplayProfit();
