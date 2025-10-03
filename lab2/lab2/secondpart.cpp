@@ -125,6 +125,8 @@ public:
 
 class InternetOperator {
 private:
+    static InternetOperator* instance;
+
     InternetOperator() {
         std::cout << "InternetOperator создан!\n";
     }
@@ -135,8 +137,11 @@ private:
     std::vector<PayPlan> pay_plans;
 
 public:
-    static InternetOperator& getInstance() {
-        static InternetOperator instance;
+    static InternetOperator* getInstance() {
+        if (instance == nullptr) {
+            instance = new InternetOperator();
+        }
+
         return instance;
     }
 
@@ -227,13 +232,15 @@ public:
     }
 };
 
+InternetOperator* InternetOperator::instance = nullptr;
+
 int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     std::locale::global(std::locale("Russian_Russia.1251"));
 
-    InternetOperator& operator_1 = InternetOperator::getInstance();
+    InternetOperator* operator_1 = InternetOperator::getInstance();
 
     std::cout << "Добавьте тарифы" << std::endl;
     std::string cancel = "";
@@ -246,7 +253,6 @@ int main()
             std::cin >> name;
             std::cout << "Стоимость тарифа: ";
             std::cin >> cost;
-
         }
         catch (...) {
             std::cout << "Что-то не так, попробуйте заново" << std::endl;
@@ -262,13 +268,13 @@ int main()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        operator_1.add_pay_plan(name, cost);
-        std::cout << "Это был последний тариф? (для выхода - 1): ";
+        operator_1->add_pay_plan(name, cost);
+        std::cout << "Это был последний тариф? (да - 1, нет - иное): ";
         std::cin >> cancel;
     }
 
     std::cout << "Вы записали следующие тарифы:" << std::endl;
-    operator_1.print_pay_plans();
+    operator_1->print_pay_plans();
 
     std::cout << "\nДобавьте клиентов" << std::endl;
     cancel = "";
@@ -282,6 +288,12 @@ int main()
             std::cin >> name;
             std::cout << "Id тарифа клиента: ";
             std::cin >> id_pp;
+        }
+        catch (...) {
+            std::cout << "Что-то не так, попробуйте заново";
+            continue;
+        }
+        try {
             std::cout << "Трафик клиента: ";
             std::cin >> t;
         }
@@ -297,16 +309,16 @@ int main()
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        operator_1.register_client(name, id_pp, t);
-        std::cout << "Это был последний клиент? (для выхода - 1): ";
+        operator_1->register_client(name, id_pp, t);
+        std::cout << "Это был последний клиент? (да - 1, нет - иное): ";
         std::cin >> cancel;
     }
 
     std::cout << "Вы записали следующих клиентов:" << std::endl;
-    operator_1.print_clients();
+    operator_1->print_clients();
 
     cancel = "";
-    std::cout << "\nЖелаете поменять трафик клиентов? (да - 1): ";
+    std::cout << "\nЖелаете поменять трафик клиентов? (да - 1, нет - иное): ";
     std::cin >> cancel;
 
     while (cancel == "1") {
@@ -315,6 +327,12 @@ int main()
         try {
             std::cout << "Введите id клиента: ";
             std::cin >> id;
+        }
+        catch (...) {
+            std::cout << "Что-то не так, попробуйте заново";
+            continue;
+        }
+        try {
             std::cout << "Введите трафик клиента: ";
             std::cin >> t;
         }
@@ -330,13 +348,16 @@ int main()
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        operator_1.change_client_traffic(t, id);
-        std::cout << "\nЖелаете продолжить? (да - 1): ";
+        operator_1->change_client_traffic(t, id);
+        std::cout << "\nЖелаете продолжить? (да - 1, нет - иное): ";
         std::cin >> cancel;
     }
 
-    operator_1.get_cost_all_trafic();
+    operator_1->get_cost_all_trafic();
 
-    operator_1.find_profit_client();
+    operator_1->find_profit_client();
 
+    delete operator_1;
+
+    return 0;
 }

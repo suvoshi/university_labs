@@ -47,7 +47,19 @@ public:
             }
         }
     }
+    ~Computer() {
+        std::cout << "Деструктор Comp";
+    }
 };
+
+void addd() {
+    Monitor m1("monitor1");
+    Monitor m2("monitor2");
+
+    Computer& comp = Computer::getInstance();
+    comp.add_monitor(m1);
+    comp.add_monitor(m2);
+}
 
 int main1()
 {
@@ -57,16 +69,9 @@ int main1()
 
     // part1
     std::cout << "Первая часть\n";
-    Monitor m1("monitor1");
-    Monitor m2("monitor2");
+    addd();
 
-    Computer& comp = Computer::getInstance();
-
-    comp.add_monitor(m1);
-    comp.add_monitor(m2);
-
-    comp.print_all_monitors();
-
+    Computer& comp1 = Computer::getInstance();
+    comp1.print_all_monitors();
     return 0;
-
 }
